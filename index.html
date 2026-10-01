@@ -1,0 +1,372 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ecom Five 3D – Calculadora de Custos de Impressão 3D</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--pink:#e0337f;--pink-d:#b8205f;--pink-l:#fde4ef;--pink-xl:#fff2f8;--ink:#4a1531;--mut:#8b6477;--line:#f5d3e3}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;font-family:'Plus Jakarta Sans',system-ui,Segoe UI,Arial,sans-serif;color:var(--ink);background:linear-gradient(180deg,#fff0f6 0%,#ffe6f0 60%,#ffdceb 100%) fixed}
+svg.i{width:1em;height:1em;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none}
+
+/* HEADER */
+header{position:relative;overflow:hidden;display:flex;align-items:center;gap:20px;padding:0 36px 0 26px;height:88px;background:linear-gradient(100deg,#e8558f 0%,#f27aaa 40%,#f9b3cf 100%);color:#fff}
+.dots{display:flex;gap:7px}.dots span{width:13px;height:13px;border-radius:50%}
+.logo{display:flex;align-items:center;gap:18px}
+.tile{width:60px;height:60px;border-radius:16px;background:#fff;display:grid;place-items:center;box-shadow:0 6px 18px rgba(160,20,80,.25)}
+.tile img{width:44px;height:auto;display:block}
+.logo h1{margin:0;font-size:29px;font-weight:800;letter-spacing:-.01em;line-height:1.1}
+.logo p{margin:2px 0 0;font-size:14px;opacity:.95}
+.sp{flex:1}
+.pill{color:var(--ink);position:relative;z-index:2;display:flex;align-items:center;gap:12px;background:rgba(255,255,255,.3);border:1px solid rgba(255,255,255,.4);border-radius:18px;padding:10px 18px 10px 12px;font-size:12px}
+.pill b{display:block;font-size:14px}.pill .ic{width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.55);display:grid;place-items:center;font-size:19px}
+.hcube{position:absolute;right:160px;top:-30px;width:170px;height:170px;opacity:.28;color:#fff;stroke-width:1}
+.btn-r{position:relative;z-index:2;display:flex;align-items:center;gap:8px;border:0;background:#fff;color:var(--ink);border-radius:999px;padding:13px 24px;font:700 15px inherit;font-family:inherit;cursor:pointer;box-shadow:0 6px 18px rgba(160,20,80,.2)}
+.btn-r:hover{transform:translateY(-1px)}
+
+/* LAYOUT */
+main{display:grid;grid-template-columns:minmax(0,1.33fr) minmax(0,1fr);gap:32px;padding:22px 36px 40px 40px;align-items:start}
+.sech{display:flex;align-items:center;gap:10px;font-weight:700;font-size:15px;margin:2px 0 12px}
+.sech .sp2{flex:1;height:1px;background:linear-gradient(90deg,var(--line),transparent)}
+.sech svg{color:var(--pink);font-size:20px}
+
+/* PRESETS */
+.presets{display:flex;gap:16px;margin-bottom:22px;flex-wrap:wrap}
+.pc{flex:1 1 150px;max-width:220px;display:flex;align-items:center;gap:14px;border:0;background:rgba(255,255,255,.55);border-radius:16px;padding:14px 16px;cursor:pointer;text-align:left;font-family:inherit;color:var(--ink);box-shadow:0 4px 14px rgba(224,51,127,.08),inset 0 0 0 1px rgba(255,255,255,.7);transition:.2s}
+.pc svg{font-size:30px;color:var(--pink)}
+.pc b{display:block;font-size:14px}.pc small{color:var(--mut);font-size:13px}
+.pc:hover{transform:translateY(-2px)}
+.pc.on{background:linear-gradient(135deg,#f0508f,#e0337f);color:#fff;box-shadow:0 10px 24px rgba(224,51,127,.35)}
+.pc.on svg,.pc.on small{color:#fff}
+
+/* FORM CARD */
+.card{background:rgba(255,255,255,.7);border:1px solid rgba(255,255,255,.9);border-radius:22px;padding:22px 26px 26px;box-shadow:0 10px 30px rgba(224,51,127,.08)}
+.card h2{display:flex;align-items:center;gap:12px;margin:0;font-size:22px;font-weight:800}
+.card h2 svg{color:var(--pink);font-size:30px}
+.card>p{margin:2px 0 14px 42px;color:var(--mut);font-size:14px}
+.sec{display:flex;align-items:center;gap:10px;font-weight:700;font-size:14px;margin:18px 0 12px}
+.sec svg{color:var(--pink);font-size:22px}
+.row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px 18px}
+.f label{display:flex;justify-content:space-between;font-size:13px;font-weight:700}
+.f label em{font-style:normal;color:var(--mut);font-weight:500}
+.f small{display:block;color:var(--mut);font-size:11.5px;margin:1px 0 6px}
+.inp{position:relative}
+.inp input{width:100%;height:44px;border:1px solid var(--line);border-radius:12px;padding:0 54px 0 16px;font:500 15px inherit;font-family:inherit;color:var(--ink);background:#fff;box-shadow:0 2px 8px rgba(224,51,127,.05)}
+.inp input:focus{outline:2px solid var(--pink);border-color:transparent}
+.inp .ic{position:absolute;right:6px;top:6px;width:32px;height:32px;border-radius:9px;background:var(--pink-l);color:var(--pink);display:grid;place-items:center;font-size:18px;pointer-events:none}
+
+.marg{background:rgba(255,255,255,.85);border:1px solid var(--line);border-radius:16px;padding:14px 18px 16px;margin-top:20px}
+.mh{display:flex;align-items:flex-start;gap:12px}
+.mh>svg{font-size:30px;color:var(--pink)}
+.mh>div{flex:1}.mh b{font-size:15px}.mh small{display:block;color:var(--mut);font-size:12px}
+#mv{font-size:30px;font-weight:800;color:var(--pink)}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:8px;border-radius:9px;margin:14px 0 16px;background:linear-gradient(90deg,var(--pink) var(--p,60%),#f3d3e2 var(--p,60%));outline:0}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;border-radius:50%;background:var(--pink);border:4px solid #fff;box-shadow:0 2px 8px rgba(224,51,127,.5);cursor:pointer}
+input[type=range]::-moz-range-thumb{width:16px;height:16px;border-radius:50%;background:var(--pink);border:4px solid #fff;cursor:pointer}
+.mg2{display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:end}
+.sw{background:linear-gradient(135deg,#ffe3ef,#ffd0e3);border-radius:14px;padding:12px 18px;display:flex;align-items:center;justify-content:space-between}
+.sw b{font-size:14px;display:block}.sw span{font-size:22px;font-weight:800}.sw svg{font-size:30px;color:var(--pink);opacity:.8}
+
+/* RIGHT PANEL */
+.right{position:sticky;top:16px;color:#fff;border-radius:30px;padding:26px 28px 26px;background:linear-gradient(150deg,#ee5e9b 0%,#e0427f 45%,#c92d6d 100%);box-shadow:0 20px 50px rgba(200,40,110,.35);overflow:hidden}
+.right:before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 20% 0%,rgba(255,255,255,.3),transparent 55%);pointer-events:none}
+.right>*{position:relative}
+.ph{display:flex;align-items:center;gap:12px;font-weight:700;font-size:18px}
+.ph .ic{width:38px;height:38px;border-radius:11px;background:rgba(255,255,255,.3);display:grid;place-items:center;font-size:22px}
+.price{font-size:64px;font-weight:800;letter-spacing:-.03em;margin:6px 0 0;line-height:1.1}
+.sub{font-size:16px;opacity:.95}.sub b{font-weight:800}
+.illus{position:absolute;right:0;top:30px;width:190px;pointer-events:none}
+.split{background:rgba(255,255,255,.85);border-radius:16px;padding:14px 18px 16px;margin:36px 0 12px;color:var(--ink)}
+.split .h{display:flex;justify-content:space-between;font-size:14px;color:var(--mut);margin-bottom:10px}.split .h b{color:var(--ink)}
+.bar2{display:flex;height:9px;border-radius:9px;overflow:hidden;background:#f3d3e2}
+.bar2 i{display:block;height:100%;background:linear-gradient(90deg,#e0337f,#c0215f);transition:width .25s}
+.bar2 i+i{background:#f6b7d1}
+.kp{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.k{display:flex;align-items:center;gap:14px;border-radius:16px;padding:14px 16px;background:rgba(140,20,70,.22);border:1px solid rgba(255,255,255,.2)}
+.k.l{background:rgba(255,255,255,.38)}
+.k .ic{width:46px;height:46px;border-radius:50%;background:rgba(255,255,255,.88);color:var(--pink);display:grid;place-items:center;font-size:22px}
+.k small{display:block;font-size:14px;opacity:.95}.k b{font-size:19px;font-weight:800}
+.ah{display:flex;align-items:center;gap:10px;font-weight:700;font-size:17px;margin:24px 0 12px}
+.ah .ic{width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.35);display:grid;place-items:center;font-size:17px}
+.it{display:grid;grid-template-columns:82px 1fr 72px;align-items:center;gap:12px;font-size:14px;margin-bottom:11px}
+.it b{text-align:right;font-weight:500}
+.track{height:7px;border-radius:9px;background:rgba(255,255,255,.3);overflow:hidden}
+.track i{display:block;height:100%;border-radius:9px;background:linear-gradient(90deg,#ff8dbd,#ffc7df)}
+.pay{display:flex;gap:10px;align-items:center;background:rgba(140,20,70,.22);border:1px solid rgba(255,255,255,.2);border-radius:14px;padding:12px 16px;font-size:14px;margin:16px 0 14px}.pay b{font-weight:800}
+.ready{width:100%;display:flex;align-items:center;gap:16px;border:0;background:#fff;color:var(--ink);border-radius:16px;padding:14px 18px;font-family:inherit;text-align:left;cursor:pointer;box-shadow:0 8px 20px rgba(120,10,60,.2)}
+.ready>svg:first-child{font-size:34px;color:var(--pink)}.ready div{flex:1}.ready b{display:block;font-size:16px}.ready small{font-size:12.5px;color:var(--mut)}
+.ready>svg:last-child{font-size:22px}
+.pdf{width:100%;margin-top:10px;height:46px;border-radius:999px;border:1.5px solid rgba(255,255,255,.7);background:transparent;color:#fff;font:700 14px inherit;font-family:inherit;cursor:pointer;display:flex;gap:8px;align-items:center;justify-content:center}
+.pdf:hover{background:rgba(255,255,255,.15)}
+#hist{margin-top:12px;font-size:13px}
+#hist .t{font-weight:700;margin:6px 0}
+#hist div.r{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.25)}
+#hist button{background:none;border:0;color:#fff;opacity:.85;cursor:pointer;text-decoration:underline;font-family:inherit}
+#toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 20px;border-radius:999px;font-size:13px;opacity:0;transition:.3s;pointer-events:none;z-index:9}
+#toast.on{opacity:1}
+
+.mkn{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:4px}
+.mkc{background:rgba(255,255,255,.85);border:1px solid var(--line);border-radius:14px;padding:12px 14px;font-size:12.5px;color:var(--mut)}
+.mkc b{display:block;color:var(--ink);font-size:14px;margin-bottom:2px}
+.mkc .inp input{height:40px}
+.mk{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.mc{background:rgba(255,255,255,.88);color:var(--ink);border-radius:16px;padding:14px 16px}
+.mc h4{margin:0 0 6px;font-size:14px;display:flex;justify-content:space-between;align-items:center}
+.mc h4 span{font-size:11px;font-weight:600;background:var(--pink-l);color:var(--pink);border-radius:999px;padding:2px 8px}
+.mc .big{font-size:24px;font-weight:800;color:var(--pink);line-height:1.1}
+.mc small{display:block;color:var(--mut);font-size:11.5px;margin-bottom:8px}
+.mc .ln{display:flex;justify-content:space-between;font-size:12.5px;padding:4px 0;border-top:1px solid var(--line)}
+.mc .ln b{font-weight:700}
+.mc .warn{font-size:11.5px;color:var(--pink-d);margin-top:6px}
+@media(max-width:1200px){.mk,.mkn{grid-template-columns:1fr}}
+@media(max-width:1200px){.row{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:1000px){main{grid-template-columns:1fr;padding:16px}.right{position:relative;top:0}.pill,.hcube,.dots{display:none}header{padding:0 16px}.illus{width:150px;top:70px}.price{font-size:48px}}
+@media(max-width:560px){.row,.mg2,.kp{grid-template-columns:1fr}.logo h1{font-size:22px}.logo p{display:none}.illus{display:none}}
+@media print{body{background:#fff}header,.left,.ready,.pdf,#hist{display:none!important}main{display:block;padding:0}.right{position:static;-webkit-print-color-adjust:exact;print-color-adjust:exact;box-shadow:none}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<symbol id="cube" viewBox="0 0 24 24"><path d="M12 2l9 5v10l-9 5-9-5V7z"/><path d="M3 7l9 5 9-5M12 12v10"/></symbol>
+<symbol id="gear" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.3"/><path d="M10.3 3h3.4l.5 2.4 1.6.9 2.3-.8 1.7 2.9-1.8 1.6v1.8l1.8 1.6-1.7 2.9-2.3-.8-1.6.9-.5 2.4h-3.4l-.5-2.4-1.6-.9-2.3.8-1.7-2.9 1.8-1.6v-1.8L4.2 8.9l1.7-2.9 2.3.8 1.6-.9z"/></symbol>
+<symbol id="sparkle" viewBox="0 0 24 24"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/><path d="M19 16l.7 1.8L21.5 18.5l-1.8.7L19 21l-.7-1.8-1.8-.7 1.8-.7z"/></symbol>
+<symbol id="key" viewBox="0 0 24 24"><circle cx="8" cy="15" r="4"/><path d="M11 12l9-9M16 7l3 3"/></symbol>
+<symbol id="chart" viewBox="0 0 24 24"><path d="M4 20V4M4 20h16M8 16v-5M12 16V8M16 16v-3"/></symbol>
+<symbol id="clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+<symbol id="scale" viewBox="0 0 24 24"><path d="M6 8h12l2 12H4z"/><path d="M9 8a3 3 0 016 0"/></symbol>
+<symbol id="coins" viewBox="0 0 24 24"><ellipse cx="12" cy="6" rx="8" ry="3"/><path d="M4 6v6c0 1.7 3.6 3 8 3s8-1.3 8-3V6M4 12v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6"/></symbol>
+<symbol id="bolt" viewBox="0 0 24 24"><path d="M13 2L4 14h7l-1 8 9-12h-7z"/></symbol>
+<symbol id="printer" viewBox="0 0 24 24"><path d="M6 9V3h12v6M6 18H4v-7h16v7h-2"/><path d="M7 14h10v7H7z"/></symbol>
+<symbol id="hourglass" viewBox="0 0 24 24"><path d="M6 3h12M6 21h12M7 3c0 5 5 6 5 9s-5 4-5 9M17 3c0 5-5 6-5 9s5 4 5 9"/></symbol>
+<symbol id="user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></symbol>
+<symbol id="boxes" viewBox="0 0 24 24"><path d="M12 3l4 2v4l-4 2-4-2V5zM6 12l4 2v4l-4 2-4-2v-4zM18 12l4 2v4l-4 2-4-2v-4z"/></symbol>
+<symbol id="bars" viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-8M2 20h20"/></symbol>
+<symbol id="shield" viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/></symbol>
+<symbol id="calc" viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M8 6h8M8 11h.01M12 11h.01M16 11h.01M8 15h.01M12 15h.01M16 15h.01M8 19h8"/></symbol>
+<symbol id="arrow" viewBox="0 0 24 24"><path d="M7 17L17 7M8 7h9v9"/></symbol>
+<symbol id="pie" viewBox="0 0 24 24"><path d="M21 12A9 9 0 1112 3v9z"/><path d="M15 3.5A9 9 0 0120.5 9H15z"/></symbol>
+<symbol id="info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></symbol>
+<symbol id="doc" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h4"/></symbol>
+<symbol id="chev" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></symbol>
+<symbol id="refresh" viewBox="0 0 24 24"><path d="M20 12a8 8 0 11-2.3-5.7M20 4v5h-5"/></symbol>
+<symbol id="badge" viewBox="0 0 24 24"><path d="M12 3l2.5 1.6 3 .1 1.2 2.7 2.2 2L20 12l.9 2.7-2.2 2-1.2 2.7-3 .1L12 21l-2.5-1.6-3-.1-1.2-2.7-2.2-2L4 12l-.9-2.7 2.2-2 1.2-2.7 3-.1z"/><path d="M9 12l2 2 4-4"/></symbol>
+<symbol id="dl" viewBox="0 0 24 24"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></symbol>
+</defs></svg>
+
+<header>
+  <div class="dots"><span style="background:#ff5f57"></span><span style="background:#febc2e"></span><span style="background:#28c840"></span></div>
+  <div class="logo">
+    <div class="tile"><img src="logo-ecom-five.png" alt="Ecom Five"></div>
+    <div><h1>Ecom Five 3D</h1><p>Calculadora de custos de impressão 3D</p></div>
+  </div>
+  <div class="sp"></div>
+  <svg class="i hcube"><use href="#cube"/></svg>
+  <div class="pill"><span class="ic"><svg class="i"><use href="#badge"/></svg></span><div><b>Orçamento em tempo real</b>Cálculo local no navegador</div></div>
+  <button class="btn-r" id="reset"><svg class="i" style="font-size:18px"><use href="#refresh"/></svg>Resetar</button>
+</header>
+
+<main>
+  <section class="left">
+    <div class="sech"><svg class="i"><use href="#sparkle"/></svg>Comece por um cenário<span class="sp2"></span></div>
+    <div class="presets" id="chips"></div>
+
+    <div class="card">
+      <h2><svg class="i"><use href="#gear"/></svg>Dados da peça</h2>
+      <p>Ajuste ou use um preset. O preço à direita acompanha cada mudança.</p>
+
+      <div class="sec"><svg class="i"><use href="#cube"/></svg>Material e tempo</div>
+      <div class="row">
+        <div class="f"><label>Peso da peça <em>g</em></label><small>Peso no slicer, com suportes.</small><div class="inp"><input type="text" inputmode="decimal" id="peso"><span class="ic"><svg class="i"><use href="#scale"/></svg></span></div></div>
+        <div class="f"><label>Preço do filamento <em>R$/kg</em></label><small>Quanto custa 1 kg do material.</small><div class="inp"><input type="text" inputmode="decimal" id="filamento"><span class="ic"><svg class="i"><use href="#coins"/></svg></span></div></div>
+        <div class="f"><label>Tempo de impressão <em>h</em></label><small>Horas que o slicer estima para a peça.</small><div class="inp"><input type="text" inputmode="decimal" id="tempo"><span class="ic"><svg class="i"><use href="#clock"/></svg></span></div></div>
+        <div class="f"><label>Potência média <em>W</em></label><small>Consumo da impressora, em watts.</small><div class="inp"><input type="text" inputmode="decimal" id="potencia"><span class="ic"><svg class="i"><use href="#bolt"/></svg></span></div></div>
+      </div>
+
+      <div class="sec"><svg class="i"><use href="#gear"/></svg>Operação e trabalho</div>
+      <div class="row">
+        <div class="f"><label>Tarifa de energia <em>R$/kWh</em></label><small>Preço do kWh na sua conta de luz.</small><div class="inp"><input type="text" inputmode="decimal" id="tarifa"><span class="ic"><svg class="i"><use href="#bolt"/></svg></span></div></div>
+        <div class="f"><label>Valor da máquina <em>R$</em></label><small>O que você pagou na impressora.</small><div class="inp"><input type="text" inputmode="decimal" id="maquina"><span class="ic"><svg class="i"><use href="#printer"/></svg></span></div></div>
+        <div class="f"><label>Vida útil <em>h</em></label><small>Horas totais estimadas da máquina.</small><div class="inp"><input type="text" inputmode="decimal" id="vida"><span class="ic"><svg class="i"><use href="#hourglass"/></svg></span></div></div>
+        <div class="f"><label>Hora de trabalho <em>R$/h</em></label><small>Quanto vale 1 hora do seu tempo.</small><div class="inp"><input type="text" inputmode="decimal" id="horaTrab"><span class="ic"><svg class="i"><use href="#user"/></svg></span></div></div>
+        <div class="f"><label>Horas manuais <em>h</em></label><small>Setup, acabamento e embalagem.</small><div class="inp"><input type="text" inputmode="decimal" id="manuais"><span class="ic"><svg class="i"><use href="#clock"/></svg></span></div></div>
+        <div class="f"><label>Quantidade <em>un</em></label><small>Peças iguais neste lote.</small><div class="inp"><input type="text" inputmode="decimal" id="qtd"><span class="ic"><svg class="i"><use href="#boxes"/></svg></span></div></div>
+      </div>
+
+      <div class="marg">
+        <div class="mh"><svg class="i"><use href="#bars"/></svg><div><b>Margem de lucro</b><small>Lucro sobre o custo real — arraste para simular.</small></div><span id="mv">120%</span></div>
+        <input type="range" id="margem" min="0" max="200" step="1">
+        <div class="mg2">
+          <div class="f"><label>Risco de falha <em>%</em></label><small>Reserva para retrabalho se a peça falhar.</small><div class="inp"><input type="text" inputmode="decimal" id="risco"><span class="ic"><svg class="i"><use href="#shield"/></svg></span></div></div>
+          <div class="sw"><div><b>Só peso + margem</b><span id="soPeso">R$ 0,00</span></div><svg class="i"><use href="#calc"/></svg></div>
+        </div>
+      </div>
+
+      <div class="sec"><svg class="i"><use href="#coins"/></svg>Taxas dos marketplaces</div>
+      <div class="row" style="margin-bottom:12px">
+        <div class="f"><label>Preço que quero vender <em>R$</em></label><small>Calcula sua margem em cada marketplace.</small><div class="inp"><input type="text" inputmode="decimal" id="venda" placeholder="Ex.: 29,90"><span class="ic"><svg class="i"><use href="#coins"/></svg></span></div></div>
+        <div class="f"><label>Imposto <em>%</em></label><small>Percentual sobre o valor de venda.</small><div class="inp"><input type="text" inputmode="decimal" id="imposto" placeholder="Ex.: 6"><span class="ic"><svg class="i"><use href="#bars"/></svg></span></div></div>
+      </div>
+      <div class="mkn">
+        <div class="mkc"><b>TikTok Shop</b>Automático: abaixo de R$ 50 → 16% + R$ 4 · a partir de R$ 50 → 12% + R$ 6 por unidade.</div>
+        <div class="mkc"><b>Shopee</b>Automático: 20% + R$ 4 · R$ 80–99 → 14% + R$ 16 · R$ 100–149 → 14% + R$ 20 · até R$ 199,90 → 14% + R$ 26.</div>
+        <div class="mkc"><b>Mercado Livre</b>11,5% + valor fixo por unidade (varia, preencha):
+          <div class="inp" style="margin-top:8px"><input type="text" inputmode="decimal" id="mlFixo" placeholder="R$ 0,00"><span class="ic"><svg class="i"><use href="#coins"/></svg></span></div></div>
+      </div>
+    </div>
+  </section>
+
+  <aside class="right" id="result">
+    <div class="ph"><span class="ic"><svg class="i"><use href="#bars"/></svg></span>Preço sugerido</div>
+    <svg class="illus" viewBox="0 0 260 200" aria-hidden="true">
+      <defs><linearGradient id="cg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffd3e6"/><stop offset="1" stop-color="#f7a1c6"/></linearGradient></defs>
+      <g transform="rotate(14 150 80)"><rect x="95" y="15" width="110" height="140" rx="14" fill="url(#cg)"/><rect x="108" y="28" width="84" height="26" rx="6" fill="#f48bb8"/>
+      <g fill="#fff" opacity=".85"><rect x="108" y="66" width="22" height="16" rx="5"/><rect x="138" y="66" width="22" height="16" rx="5"/><rect x="168" y="66" width="22" height="16" rx="5"/><rect x="108" y="90" width="22" height="16" rx="5"/><rect x="138" y="90" width="22" height="16" rx="5"/><rect x="168" y="90" width="22" height="16" rx="5"/><rect x="108" y="114" width="22" height="16" rx="5"/><rect x="138" y="114" width="22" height="16" rx="5"/><rect x="168" y="114" width="22" height="30" rx="5"/></g></g>
+      <g fill="url(#cg)"><g><ellipse cx="55" cy="150" rx="36" ry="12"/><rect x="19" y="138" width="72" height="12" fill="#f7a1c6"/><ellipse cx="55" cy="138" rx="36" ry="12"/><rect x="19" y="126" width="72" height="12" fill="#f7a1c6"/><ellipse cx="55" cy="126" rx="36" ry="12"/></g>
+      <g><rect x="190" y="160" width="60" height="14" fill="#f7a1c6"/><ellipse cx="220" cy="174" rx="30" ry="10"/><ellipse cx="220" cy="160" rx="30" ry="10"/></g></g>
+    </svg>
+    <div class="price" id="preco">R$ 0,00</div>
+    <div class="sub">por peça · lote <b id="lote">R$ 0,00</b></div>
+
+    <div class="split"><div class="h"><span>Custo vs lucro no preço</span><b id="pctL">0% lucro</b></div>
+      <div class="bar2"><i id="barC" style="width:100%"></i><i id="barL" style="width:0"></i></div></div>
+
+    <div class="kp">
+      <div class="k"><span class="ic"><svg class="i"><use href="#coins"/></svg></span><div><small>Custo unitário</small><b id="kCusto">-</b></div></div>
+      <div class="k l"><span class="ic"><svg class="i"><use href="#arrow"/></svg></span><div><small>Lucro unitário</small><b id="kLucro">-</b></div></div>
+      <div class="k"><span class="ic"><svg class="i"><use href="#clock"/></svg></span><div><small>Tempo total</small><b id="kTempo">-</b></div></div>
+      <div class="k l"><span class="ic"><svg class="i"><use href="#scale"/></svg></span><div><small>Só filamento</small><b id="kFil">-</b></div></div>
+    </div>
+
+    <div class="ah"><span class="ic"><svg class="i"><use href="#pie"/></svg></span>Anatomia do custo</div>
+    <div id="an"></div>
+
+    <div class="ah"><span class="ic"><svg class="i"><use href="#coins"/></svg></span>Preço por marketplace</div>
+    <div class="mk" id="mk"></div>
+
+    <div class="pay"><svg class="i" style="font-size:18px"><use href="#info"/></svg><span id="pay"></span></div>
+
+    <button class="ready" id="salvar"><svg class="i"><use href="#doc"/></svg><div><b>Orçamento pronto</b><small>Salve no histórico ou gere o PDF para enviar ao cliente.</small></div><svg class="i"><use href="#chev"/></svg></button>
+    <button class="pdf" id="pdf"><svg class="i" style="font-size:18px"><use href="#dl"/></svg>Gerar PDF</button>
+    <div id="hist"></div>
+  </aside>
+</main>
+<div id="toast"></div>
+
+<script>
+const $=id=>document.getElementById(id);
+const IDS=['peso','filamento','tempo','potencia','tarifa','maquina','vida','horaTrab','manuais','qtd','risco','mlFixo','venda','imposto'];
+const DEF={peso:64.3,filamento:119,tempo:2.36,potencia:95,tarifa:1,maquina:4488.82,vida:20000,horaTrab:5,manuais:0.19,qtd:1,risco:5,margem:120,mlFixo:'',venda:'',imposto:''};
+const PRESETS=[
+ {n:'Chaveiro',d:'Leve · rápido',ic:'key',v:{peso:12,tempo:0.6,manuais:0.1,qtd:1,margem:150,risco:3}},
+ {n:'Peça técnica',d:'Média · funcional',ic:'gear',v:{peso:64.3,tempo:2.36,manuais:0.19,qtd:1,margem:120,risco:5}},
+ {n:'Miniatura',d:'Detalhe · lenta',ic:'chart',v:{peso:35,tempo:9,manuais:0.8,qtd:1,margem:180,risco:10}},
+ {n:'Lote 10 un',d:'Escala · setup',ic:'clock',v:{peso:40,tempo:1.8,manuais:0.05,qtd:10,margem:100,risco:4}}
+];
+const num=s=>{s=String(s).replace(/\s/g,'');if(s.includes(','))s=s.replace(/\./g,'').replace(',','.');const n=parseFloat(s);return isFinite(n)?n:0};
+const fmt=(n,d=2)=>n.toLocaleString('pt-BR',{minimumFractionDigits:d,maximumFractionDigits:d});
+const brl=n=>'R$ '+fmt(n);
+const show=n=>String(n).replace('.',',');
+
+function set(v){for(const k in v){if(k==='margem')$('margem').value=v[k];else $(k).value=show(v[k])}calc()}
+function read(){const o={};IDS.forEach(i=>o[i]=num($(i).value));o.margem=+$('margem').value;return o}
+
+const MK=[
+ {n:'TikTok Shop',t:[{lo:0,hi:50,r:.16,f:4},{lo:50,hi:Infinity,r:.12,f:6}]},
+ {n:'Shopee',t:[{lo:0,hi:80,r:.20,f:4},{lo:80,hi:100,r:.14,f:16},{lo:100,hi:150,r:.14,f:20},{lo:150,hi:Infinity,r:.14,f:26}]},
+ {n:'Mercado Livre',ml:true,t:[{lo:0,hi:Infinity,r:.115,f:0}]}
+];
+const pct=r=>fmt(r*100,r*1000%10?1:0)+'%';
+function tierOf(t,p){return t.find(x=>p>=x.lo&&p<x.hi)||t[t.length-1]}
+function grossUp(t,alvo,fx,imp){
+  const mk=x=>({p:0,x});
+  for(const x of t){const f=fx??x.f;const p=(alvo+f)/(1-x.r-imp);if(p<x.lo)return{p:x.lo,x:{...x,f}};if(p<x.hi)return{p,x:{...x,f}}}
+  const x=t[t.length-1],f=fx??x.f;return{p:(alvo+f)/(1-x.r-imp),x:{...x,f}}
+}
+function renderMk(custo,preco,d,mlBlank){
+  const imp=Math.min(Math.max(d.imposto,0),90)/100, venda=d.venda;
+  $('mk').innerHTML=MK.map(m=>{
+    const fx=m.ml?d.mlFixo:null;
+    const g=grossUp(m.t,preco,fx,imp);
+    const feeG=g.p*g.x.r+g.x.f, impG=g.p*imp;
+    let main;
+    if(venda>0){
+      const a=tierOf(m.t,venda),fa=m.ml?d.mlFixo:a.f;
+      const fee=venda*a.r+fa, tax=venda*imp, liq=venda-fee-tax-custo;
+      const neg=liq<0?' style="color:#c0152f"':'';
+      main='<div class="big"'+neg+'>'+brl(liq)+'</div><small>lucro líquido vendendo a '+brl(venda)+' ('+pct(a.r)+' + '+brl(fa)+')</small>'
+        +'<div class="ln"><span>Taxa do marketplace</span><b>'+brl(fee)+'</b></div>'
+        +'<div class="ln"><span>Imposto ('+fmt(imp*100,imp*1000%10?1:0)+'%)</span><b>'+brl(tax)+'</b></div>'
+        +'<div class="ln"><span>Margem sobre a venda</span><b'+neg+'>'+fmt(liq/venda*100,1)+'%</b></div>'
+        +'<div class="ln"><span>Margem sobre o custo</span><b'+neg+'>'+(custo>0?fmt(liq/custo*100,1):'0,0')+'%</b></div>'
+        +'<div class="ln"><span>Preço p/ manter o lucro sugerido</span><b>'+brl(g.p)+'</b></div>';
+    } else {
+      main='<div class="big">'+brl(g.p)+'</div><small>preço de venda para manter o lucro sugerido</small>'
+        +'<div class="ln"><span>Taxa ('+pct(g.x.r)+' + '+brl(g.x.f)+')</span><b>'+brl(feeG)+'</b></div>'
+        +'<div class="ln"><span>Imposto ('+fmt(imp*100,imp*1000%10?1:0)+'%)</span><b>'+brl(impG)+'</b></div>'
+        +'<div class="ln"><span>Você recebe</span><b>'+brl(g.p-feeG-impG)+'</b></div>'
+        +'<div class="warn" style="color:var(--mut)">Informe seu preço de venda para ver a margem.</div>';
+    }
+    return '<div class="mc"><h4>'+m.n+'<span>'+pct(g.x.r)+' + '+brl(g.x.f)+'</span></h4>'+main
+      +(m.ml&&mlBlank?'<div class="warn">Preencha o valor fixo do Mercado Livre.</div>':'')+'</div>';
+  }).join('');
+}
+let last=null;
+function calc(){
+  const d=read();
+  const fil=d.peso*d.filamento/1000;
+  const en=d.potencia/1000*d.tempo*d.tarifa;
+  const mq=d.vida>0?d.maquina/d.vida*d.tempo:0;
+  const tr=d.horaTrab*d.manuais;
+  const base=fil+en+mq+tr;
+  const fal=base*d.risco/100;
+  const custo=base+fal;
+  const lucro=custo*d.margem/100;
+  const preco=custo+lucro;
+  const qtd=Math.max(d.qtd,1);
+  const soPeso=fil*(1+d.margem/100);
+  renderMk(custo,preco,d,$('mlFixo').value.trim()==='');
+  last={d,fil,en,mq,tr,fal,custo,lucro,preco,qtd};
+
+  $('mv').textContent=d.margem+'%';
+  $('margem').style.setProperty('--p',(d.margem/200*100)+'%');
+  $('preco').textContent=brl(preco);
+  $('lote').textContent=brl(preco*qtd);
+  $('soPeso').textContent=brl(soPeso);
+  const pl=preco>0?lucro/preco*100:0;
+  $('pctL').textContent=Math.round(pl)+'% lucro';
+  $('barC').style.width=(100-pl)+'%';$('barL').style.width=pl+'%';
+  $('kCusto').textContent=brl(custo);
+  $('kLucro').textContent=brl(lucro);
+  $('kTempo').textContent=fmt(d.tempo*qtd,1)+' h';
+  $('kFil').textContent=brl(soPeso);
+  const items=[['Filamento',fil],['Energia',en],['Máquina',mq],['Trabalho',tr],['Falhas',fal]];
+  $('an').innerHTML=items.map(([n,v])=>`<div class="it"><span>${n}</span><div class="track"><i style="width:${custo>0?v/custo*100:0}%"></i></div><b>${brl(v)}</b></div>`).join('');
+  $('pay').innerHTML=lucro>0&&d.maquina>0?`Com esse lucro, cerca de <b>${Math.ceil(d.maquina/lucro).toLocaleString('pt-BR')} peças</b> pagam a máquina.`:'Defina uma margem de lucro para ver o retorno da máquina.';
+}
+
+function toast(t){const e=$('toast');e.textContent=t;e.classList.add('on');setTimeout(()=>e.classList.remove('on'),1800)}
+function hist(){try{return JSON.parse(localStorage.getItem('calc3d_hist')||'[]')}catch(e){return[]}}
+function renderHist(){
+  const h=hist();
+  $('hist').innerHTML=h.length?'<div class="t">Histórico</div>'+h.map((x,i)=>`<div class="r"><span>${x.data} · ${brl(x.preco)}</span><button data-i="${i}">remover</button></div>`).join(''):'';
+}
+$('hist').addEventListener('click',e=>{const i=e.target.dataset.i;if(i===undefined)return;const h=hist();h.splice(i,1);try{localStorage.setItem('calc3d_hist',JSON.stringify(h))}catch(_){}renderHist()});
+$('salvar').onclick=()=>{
+  const h=hist();h.unshift({data:new Date().toLocaleString('pt-BR'),preco:last.preco,dados:read()});
+  try{localStorage.setItem('calc3d_hist',JSON.stringify(h.slice(0,30)));toast('Orçamento salvo!')}catch(e){toast('Não foi possível salvar')}
+  renderHist();
+};
+$('pdf').onclick=()=>window.print();
+function mark(i){document.querySelectorAll('.pc').forEach((b,j)=>b.classList.toggle('on',j===i))}
+$('reset').onclick=()=>{set(DEF);mark(-1)};
+
+PRESETS.forEach((p,i)=>{const b=document.createElement('button');b.className='pc';b.innerHTML=`<svg class="i"><use href="#${p.ic}"/></svg><span><b>${p.n}</b><small>${p.d}</small></span>`;b.onclick=()=>{set({...DEF,...p.v});mark(i)};$('chips').appendChild(b)});
+IDS.forEach(i=>$(i).addEventListener('input',calc));
+$('margem').addEventListener('input',calc);
+set(DEF);renderHist();
+</script>
+</body>
+</html>
